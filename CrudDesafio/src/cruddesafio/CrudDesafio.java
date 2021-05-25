@@ -7,11 +7,9 @@ package cruddesafio;
 
 import dao.UsuarioDAO;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -38,7 +36,7 @@ public class CrudDesafio {
             while(linha != null) {
                 
                 // NAVEGA NA STRING ARMAZENANDO OS DADOS NO VETOR LEVANDO COMO REFERENCIA AS VIRGULAS
-                String[] vetor = linha.split(",");
+                String[] vetor = linha.split(";");
                 String nome = vetor[0];
                 int idade = Integer.parseInt(vetor[1]);
                 String sexo = vetor[2];

@@ -1,0 +1,3 @@
+Nome;Idade;Sexo
+Amauri;30;M
+Kevin;24;M

@@ -5,16 +5,11 @@
  */
 package cruddesafio;
 
-import java.io.Serializable;
-
 /**
  *
  * @author kevin
  */
-                                // UTILIZADO PARA REALIZAR A GRAVACAO DOS DADOS OU TRAFEGO EM REDE, EVITA DAR ERRO
-public class Usuario implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
+public class Usuario {
     
     private long id;
     

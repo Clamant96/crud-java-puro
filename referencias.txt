@@ -1,0 +1,5 @@
+Como acessar um arquivo extorno em Java: https://www.youtube.com/watch?v=xLDViuYlqGM
+Construindo CRUD completo em Java puro e MySQL: https://www.youtube.com/playlist?list=PLh7NspZkGKR8-bR7B_MHUT2JSudZxKehJ
+
+MySQL connector em anexo.
+Base de dados em anexo.
