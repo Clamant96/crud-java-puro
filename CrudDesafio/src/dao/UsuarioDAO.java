@@ -93,46 +93,67 @@ public class UsuarioDAO {
     /* POST */
     public static boolean inserirUsuario(Usuario usuario) {
         boolean status = false;
+        boolean validacao = true;
         
-        try {
-            /* INSTANCIA UM NOVO DRIVER PARA SE COMUNICAR COM O MYSQL */
-            Driver driver = new Driver();
-            
-            /* REGISTRA ESSA INSTANCIA PARA QUE O JAVA SAIBA QUE E EXATAMENTE ESSE DRIVE QUE ESTAMOS QUERENDO UTILIZAR */
-            DriverManager.registerDriver(driver);
-            
-            /* REALIZA CONEXAO COM O BANCO DE DADOS */
-            Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
-            
-            /* CONSTROE UMA QUERY PARA REALIZAR A INSERSAO DE DADOS NA BASE DE DADOS */
-            /* COMO AINDA NAO TEMOS OS DADOS, INFORMAMOS NO LUGAR DO VALUES ?, DE ACORDO COM A QTD DE ITENS CONTIDOS NA TABELA EM QUE ESTAMOS INSERINDO OS DADOS */
-            PreparedStatement query = conexao.prepareStatement("INSERT INTO desafio_flashsafe.usuario(nome, idade, sexo) VALUES(?, ?, ?)");
-            
-            /* INSERE DADOS NAS POSICOES ESPECIFICADAS DA QUARY */
-            query.setString(1, usuario.getNome());
-            query.setInt(2, usuario.getIdade());
-            query.setString(3, usuario.getSexo());
-            
-            /* INSERE OS DADOS NA BASE DE DADOS, E COMO RETORNO NOS TRAZ A QTD DE LINHAS AFETADAS COM A ALTERACAO DO BANCO */
-            /* ARMAZENA A QTD DE LINHAS AFETADAS DENTRO DE UMA VARAIVEL */
-            int linhasAfetadas =  query.executeUpdate();
-            
-            /* VERIRICA SE O DADO FOI INSERIDO COM SUCESSO, LEVANDO COMO PARAMETRO O RETORNO DO METODO executeUpdate() QUE RETONA UM INTEIRO COM AS LINHAS AFETADAS */
-            /* CASO A QTD DE LINHAS SEJA MAIOR QUE ZERO, SABEMOS HOUVE UMA ALTERACAO NO BANCO */
-            if(linhasAfetadas > 0) {
-                status = true;
+        /* CARREGA A LISTA DE USUARIO DO BANCO DE DADOS */
+        ArrayList<Usuario> listaUsuarios = buscarUsuarios();
+    	
+        /* PERCORRE O ARRAY E VERIFICA SE O USUARIO EXISTE NA BASE DE DADOS */
+    	for(int i = 0; i < listaUsuarios.size(); i++) {        		
+    		if(listaUsuarios.get(i).getNome().contains(usuario.getNome())) {
+    			System.out.println(listaUsuarios.get(i).getNome() +" ja existe na base de dados!");
+    			validacao = false;
+    			
+    		}
+    		
+    		
+    	}
+        
+    	/* CASO O USUARIO NAO EXISTA NA BASE DE DADOS, E INSERIDO O DADO NA BASE DE DADOS */
+        if(validacao) {
+        	try {
+        		System.out.println("Acessou o cadastro");
+        		
+                /* INSTANCIA UM NOVO DRIVER PARA SE COMUNICAR COM O MYSQL */
+                Driver driver = new Driver();
+                
+                /* REGISTRA ESSA INSTANCIA PARA QUE O JAVA SAIBA QUE E EXATAMENTE ESSE DRIVE QUE ESTAMOS QUERENDO UTILIZAR */
+                DriverManager.registerDriver(driver);
+                
+                /* REALIZA CONEXAO COM O BANCO DE DADOS */
+                Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+                
+                /* CONSTROE UMA QUERY PARA REALIZAR A INSERSAO DE DADOS NA BASE DE DADOS */
+                /* COMO AINDA NAO TEMOS OS DADOS, INFORMAMOS NO LUGAR DO VALUES ?, DE ACORDO COM A QTD DE ITENS CONTIDOS NA TABELA EM QUE ESTAMOS INSERINDO OS DADOS */
+                PreparedStatement query = conexao.prepareStatement("INSERT INTO desafio_flashsafe.usuario(nome, idade, sexo) VALUES(?, ?, ?)");
+                
+                /* INSERE DADOS NAS POSICOES ESPECIFICADAS DA QUARY */
+                query.setString(1, usuario.getNome());
+                query.setInt(2, usuario.getIdade());
+                query.setString(3, usuario.getSexo());
+                
+                /* INSERE OS DADOS NA BASE DE DADOS, E COMO RETORNO NOS TRAZ A QTD DE LINHAS AFETADAS COM A ALTERACAO DO BANCO */
+                /* ARMAZENA A QTD DE LINHAS AFETADAS DENTRO DE UMA VARAIVEL */
+                int linhasAfetadas =  query.executeUpdate();
+                
+                /* VERIRICA SE O DADO FOI INSERIDO COM SUCESSO, LEVANDO COMO PARAMETRO O RETORNO DO METODO executeUpdate() QUE RETONA UM INTEIRO COM AS LINHAS AFETADAS */
+                /* CASO A QTD DE LINHAS SEJA MAIOR QUE ZERO, SABEMOS HOUVE UMA ALTERACAO NO BANCO */
+                if(linhasAfetadas > 0) {
+                    status = true;
+                    
+                }
+                
+                /* FINALIZA A CONEXAO E QUERY COM O BANCO DE DADOS */
+                query.close();
+                conexao.close();
+                
+            }catch(SQLException erro) {
+                /* INFORMA NA TELA TODO O TRAJETO DO ERRO */
+                /* PERCORRE O ERRO POR COMPLETO */
+                erro.printStackTrace();
                 
             }
-            
-            /* FINALIZA A CONEXAO E QUERY COM O BANCO DE DADOS */
-            query.close();
-            conexao.close();
-            
-        }catch(SQLException erro) {
-            /* INFORMA NA TELA TODO O TRAJETO DO ERRO */
-            /* PERCORRE O ERRO POR COMPLETO */
-            erro.printStackTrace();
-            
+        	
         }
         
         return status;
